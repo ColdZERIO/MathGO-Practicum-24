@@ -2,57 +2,80 @@ package main
 
 import (
 	"fmt"
-	"sort"
+	"studentsystem/grades"
+	"studentsystem/statistics"
+	"studentsystem/storage"
 )
 
-type Product struct {
-	ID       int
-	Name     string
-	Price    float64
-	Quantity int
+func main() {
+	// Инициализация тестовых данных
+	initTestData()
+
+	// Демонстрация работы системы
+	demonstrateSystem()
 }
 
-func main() {
-	var Products = make(map[float64]Product)
+func initTestData() {
+	// Добавляем студентов
+	storage.AddStudent(1, "Иван Петров")
+	storage.AddStudent(2, "Мария Сидорова")
+	storage.AddStudent(3, "Алексей Иванов")
 
-	bread := Product{
-		ID:       777,
-		Name:     "Bread",
-		Price:    50.5,
-		Quantity: 3,
+	// Добавляем предметы
+	storage.AddSubject(1, "Математика")
+	storage.AddSubject(2, "Физика")
+	storage.AddSubject(3, "История")
+
+	// Назначаем предметы студентам
+	storage.AssignSubjectToStudent(1, 1)
+	storage.AssignSubjectToStudent(1, 2)
+	storage.AssignSubjectToStudent(2, 1)
+	storage.AssignSubjectToStudent(2, 3)
+	storage.AssignSubjectToStudent(3, 2)
+	storage.AssignSubjectToStudent(3, 3)
+
+	// Добавляем оценки
+	grades.AddGrade(1, 1, 8)  // Иван, Математика, 8
+	grades.AddGrade(1, 1, 9)  // Иван, Математика, 9
+	grades.AddGrade(1, 2, 7)  // Иван, Физика, 7
+	grades.AddGrade(2, 1, 6)  // Мария, Математика, 6
+	grades.AddGrade(2, 3, 10) // Мария, История, 10
+	grades.AddGrade(3, 2, 8)  // Алексей, Физика, 8
+	grades.AddGrade(3, 3, 9)  // Алексей, История, 9
+}
+
+func demonstrateSystem() {
+	fmt.Println("=== СИСТЕМА УЧЕТА СТУДЕНТОВ ===\n")
+
+	// Демонстрация storage
+	fmt.Println("1. Все студенты:")
+	for id, name := range storage.GetAllStudents() {
+		fmt.Printf("   %d: %s\n", id, name)
 	}
 
-	kolbasa := Product{
-		ID:       222,
-		Name:     "Kolbasa",
-		Price:    2.2,
-		Quantity: 2,
+	// Демонстрация grades
+	fmt.Println("\n2. Оценки студентов:")
+	for studentID := range storage.GetAllStudents() {
+		studentGrades, _ := grades.GetStudentGrades(studentID)
+		fmt.Printf("   Студент %d: %v\n", studentID, studentGrades)
 	}
 
-	cheese := Product{
-		ID:       111,
-		Name:     "SyrSUKA",
-		Price:    25.5,
-		Quantity: 1,
+	// Демонстрация statistics
+	fmt.Println("\n3. Статистика:")
+	for studentID, name := range storage.GetAllStudents() {
+		avg, _ := statistics.CalculateStudentAverage(studentID)
+		fmt.Printf("   %s: средний балл %.2f\n", name, avg)
 	}
 
-	prod := [3]Product{bread, kolbasa, cheese}
+	// Находим лучшего студента
+	topStudentID, topAvg, _ := statistics.FindTopStudent()
+	topName := storage.GetAllStudents()[topStudentID]
+	fmt.Printf("\n4. Лучший студент: %s со средним баллом %.2f\n", topName, topAvg)
 
-	prices := make([]float64, 0)
-
-	for _, value := range prod {
-		Products[value.Price] = value
-		prices = append(prices, value.Price)
+	// Распределение оценок по математике
+	fmt.Println("\n5. Распределение оценок по Математике:")
+	distribution := statistics.GetGradeDistribution(1)
+	for grade, count := range distribution {
+		fmt.Printf("   Оценка %d: %d студентов\n", grade, count)
 	}
-
-	sort.Float64s(prices)
-
-	for _, value := range prices {
-		for _, v := range Products {
-			if value == v.Price {
-				fmt.Println(v.Name, v)
-			}
-		}
-	}
-
 }
