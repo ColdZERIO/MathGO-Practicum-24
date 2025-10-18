@@ -1,30 +1,48 @@
 package validation
 
+// kek lol
+import (
+	"errors"
+	"regexp"
+)
+
+func StringChecker(str string) bool {
+	re := regexp.MustCompile(`^[А-Яа-я ?]+$`)
+	return re.MatchString(str)
+}
+
 func ValidateStudentID(id int) error {
-	// TODO: Проверить что ID положительный и не слишком большой
+	if id < 0 && id > 10000 {
+		return errors.New("invalid student ID: must be between 1 and 10000")
+	}
+
+	return nil
 }
 
 func ValidateStudentName(name string) error {
-	// TODO: Проверить что имя не пустое, длина от 2 до 50 символов
-	// Проверить что имя состоит только из букв
+	if len(name) >= 2 && len(name) <= 50 && StringChecker(name) {
+		return nil
+	}
+	return errors.New("invalid student name")
 }
 
 func ValidateSubjectID(id int) error {
-	// TODO: Проверить что ID положительный
+	if id < 0 && id > 1000 {
+		return errors.New("invalid subject ID")
+	}
+	return nil
 }
 
 func ValidateSubjectName(name string) error {
-	// TODO: Проверить что название предмета валидно
+	if len(name) >= 2 && len(name) <= 30 && StringChecker(name) {
+		return nil
+	}
+	return errors.New("invalid student name")
 }
 
 func ValidateGrade(grade int) error {
-	// TODO: Проверить что оценка от 1 до 10
-}
-
-func ValidateStudentExists(studentID int) error {
-	// TODO: Проверить что студент существует в мапе storage.Students
-}
-
-func ValidateSubjectExists(subjectID int) error {
-	// TODO: Проверить что предмет существует в мапе storage.Subjects
+	if grade >= 1 && grade <= 10 {
+		return nil
+	}
+	return errors.New("invalid grade: must be between 1 and 10")
 }
