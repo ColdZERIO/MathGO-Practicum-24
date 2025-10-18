@@ -1,4 +1,4 @@
-package main
+package validation
 
 import (
 	"errors"
@@ -44,13 +44,4 @@ func ValidateGrade(grade int) error {
 		return nil
 	}
 	return errors.New("invalid grade: must be between 1 and 10")
-}
-
-// Функции проверки наличие в storage.Students и в storage.Subjects должны проводиться внутри storage с точки зрения логики, это не является валидацией
-func ValidateStudentExists(studentID int) error {
-	return errors.New("")
-}
-
-func ValidateSubjectExists(subjectID int) error {
-	return errors.New("")
 }
