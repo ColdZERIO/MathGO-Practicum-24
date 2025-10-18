@@ -1,5 +1,6 @@
 package validation
 
+// kek lol
 import (
 	"errors"
 	"regexp"
