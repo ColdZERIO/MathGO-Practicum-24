@@ -1,5 +1,7 @@
 package grades
 
+// Сделайте этот пакет уже и двигаемся дальше
+
 // Мапа для хранения оценок: StudentID -> SubjectID -> []int (слайс оценок)
 var Grades = make(map[int]map[int][]int)
 
