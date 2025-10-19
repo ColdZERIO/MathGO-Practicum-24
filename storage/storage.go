@@ -2,7 +2,7 @@ package storage
 
 import (
 	"errors"
-	"univer/validation"
+	"studentsystem/validation"
 )
 
 // Мапы для хранения данных

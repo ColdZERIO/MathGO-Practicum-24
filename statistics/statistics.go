@@ -2,8 +2,8 @@ package statistics
 
 import (
 	"errors"
-	"univer/grades"
-	"univer/storage"
+	"studentsystem/grades"
+	"studentsystem/storage"
 )
 
 var errStudent = errors.New("Студент не найден")
